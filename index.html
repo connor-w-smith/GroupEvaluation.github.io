@@ -13,7 +13,8 @@
         <!-- Creating the Login Form -->
         <form class=" bg-dark card col-12 col-md-5 col-lg-4" id="formLogin">
             <div class="card-body">
-                <h3 class="text-center mb-0 text-primary">Group Evaluation</h3>
+                <h3 class="text-center mb-0 text-primary">Welcome To Group Evaluation!</h3>
+                <p class="text-center mt-2 text-secondary"><em>Please enter your information.</em></p>
                 <div class="form-floating mt-3 mb-3">
                     <!--PROBLEM WITH INPUT: ONCE CLICKED ON, THE TEXT GOES WHITE-->
                     <input type="email" class="form-control bg-dark" id="loginEmail" aria-label="Email Address" placeholder="name@example.com">
@@ -25,7 +26,10 @@
                     <label for="loginPassword" class="form-label">Password</label>
                 </div>
                 <div class="text-center">
-                    <button type="button" class="btn btn-outline-primary mt-3" id="loginBtn">Login</button>
+                    <button type="button" class="btn btn-outline-primary mt-3" aria-label="Login Button" id="loginBtn">Login</button>
+                </div>
+                <div class=" d-flex justify-content-end">
+                    <a href="#" class="mt-4 text-secondary" aria-label="Register Link"><em>Don't have an account? Register Here!</em></a>
                 </div>
             </div>
         </form>
