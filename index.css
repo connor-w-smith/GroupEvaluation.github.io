@@ -5,3 +5,7 @@
 a {
     text-decoration: none;
 }
+
+#selectForm {
+    max-width: 20rem;
+}
