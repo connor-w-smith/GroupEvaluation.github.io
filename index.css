@@ -9,3 +9,22 @@ a {
 #selectForm {
     max-width: 20rem;
 }
+
+
+
+/* Ensure the card has proper width */
+.card {
+    min-width: 350px; /* Adjust width */
+    max-width: 500px; /* Prevent overly wide */
+}
+
+/* Ensure text inside inputs doesn't get squeezed */
+.form-control {
+    min-width: 100%;
+}
+
+/* Adjust button to be more proportional */
+.btn {
+    font-size: 1.2rem;
+    padding: 10px;
+}
