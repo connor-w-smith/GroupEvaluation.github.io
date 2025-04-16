@@ -21,11 +21,48 @@ Ben Burchfield
 - Add-to-Home Screen capability (PWA manifest)
 
 ### Instructor Experience:
-
+- Register & Login (email with `.edu` validation and MFA support)
+- Password reset and secure logout
+- Course management:
+  - Create and manage courses
+  - Add students via upload or invite codes
+- Team and Review management:
+  - Create teams
+  - Create, read, update, delete (CRUD) review questions
+  - Support for Likert, multiple choice, and short answer formats
+  - Schedule reviews and view results (public/private)
+- Reporting tools:
+  - Student averages (100pt scale)
+  - Class metrics (sortable)
 
 ### Student Experience: 
-
+- Register & Login with contact info (mobile, Discord, Teams)
+- Secure login with MFA and password recovery
+- Participate in assigned reviews
+- Submit public and private feedback
+- View personal reports:
+  - Combined feedback from peers
+  - Overall performance scores
 
 ---
 
 ## Constraints & Compliance:
+- Emails must be valid
+- Passwords must comply with NIST standards and never stored as plain text
+- Secure backend routes and authentication using Passport.js
+- Backend: Node.js with Express
+- Frontend: HTML, CSS (Bootstrap), JavaScript (frameworks allowed if covered in class)
+- Organized codebase modeled after "charts" example
+- All data persisted in a relational DB
+- Must meet accessibility standards
+
+## Tech Stack:
+| Layer        | Tech                          |
+|--------------|-------------------------------|
+| Frontend     | HTML, CSS (Bootstrap), JS     |
+| Backend      | Node.js, Express              |
+| Database     | MariaDB or PostgreSQL         |
+| Authentication | Passport.js + MFA (Email/SMS) |
+| Deployment   | GitHub + GCP + CI/CD          |
+
+---
