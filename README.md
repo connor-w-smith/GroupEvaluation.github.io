@@ -5,8 +5,8 @@ This platform facilitates seamless interaction between instructors and students,
 
 ---
 ## Names:
-Damian Owen  
-Connor Smith  
+- Damian Owen
+- Connor Smith
 ## Class: 
 CSC 3410 Web Design 
 ## Teacher:  
