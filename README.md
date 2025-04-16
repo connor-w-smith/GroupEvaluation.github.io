@@ -63,6 +63,5 @@ Ben Burchfield
 | Backend      | Node.js, Express              |
 | Database     | MariaDB or PostgreSQL         |
 | Authentication | Passport.js + MFA (Email/SMS) |
-| Deployment   | GitHub + GCP + CI/CD          |
 
 ---
