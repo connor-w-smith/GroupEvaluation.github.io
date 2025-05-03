@@ -75,6 +75,8 @@ loginBtn.addEventListener('click', () => {
 });
 //end nodemailer
 
+app.use(express.json());
+app.use(cors())
 // Connect to the database
 const db = new sqlite3.Database('./groupevaluation.db', (err) => {
   if (err) {
@@ -84,6 +86,24 @@ const db = new sqlite3.Database('./groupevaluation.db', (err) => {
   }
 });
 
+//create table if it doesn't exist:
+db.run(`
+    CREATE TABLE IF NOT EXISTS tblUsers (
+      UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+      FirstName TEXT,
+      LastName TEXT,
+      Email TEXT UNIQUE,
+      Password TEXT,
+      CreationDateTime TEXT,
+      LastLoginDateTime TEXT
+    )
+  `, (err) => {
+    if (err) {
+      console.error('Error creating tblUsers table:', err.message);
+    } else {
+      console.log('tblUsers table ensured.');
+    }
+  });
 // Register a new user
 app.post('/register', async (req, res) => {
   const { FirstName, LastName, Email, Password } = req.body;
