@@ -1,6 +1,7 @@
 // Nodemailer 2FA feature
 const nodemailer = require('nodemailer');
 const {authenticator} = require('otplib');
+require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
   service: 'gmail', //Replace with your chosen email service
