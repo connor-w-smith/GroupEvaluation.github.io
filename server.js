@@ -24,7 +24,7 @@ const db = new sqlite3.Database('./groupevaluation.db', (err) => {
   }
 });
 
-//create table if it doesn't exist:
+//create tblUsers if it doesn't exist:
 db.run(`
     CREATE TABLE IF NOT EXISTS tblUsers (
       UserID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -117,3 +117,20 @@ app.get('/users', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+//ADDED THIS USER TO THE DB FOR TESTING:
+// fetch('http://localhost:3000/register', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       FirstName: 'John',
+//       LastName: 'Doe',
+//       Email: 'john.doe@example.com',
+//       Password: 'password123',
+//     }),
+//   })
+//     .then((response) => response.json())
+//     .then((data) => console.log(data))
+//     .catch((error) => console.error('Error:', error));
