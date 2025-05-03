@@ -5,5 +5,23 @@
     "nodemailer": "^6.10.1",
     "otplib": "^12.0.1",
     "sha256": "^0.2.0"
-  }
+  },
+  "name": "groupevaluation.github.io",
+  "version": "1.0.0",
+  "description": "application to evaluate student's Capstone groups",
+  "main": "server.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/connor-w-smith/GroupEvaluation.github.io.git"
+  },
+  "author": "Connor Smith, Damian Owen, Elijah Beatty, Liam Rivers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/connor-w-smith/GroupEvaluation.github.io/issues"
+  },
+  "homepage": "https://github.com/connor-w-smith/GroupEvaluation.github.io#readme"
 }
