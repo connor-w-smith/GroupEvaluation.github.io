@@ -1,6 +1,7 @@
 // Nodemailer 2FA feature
 const nodemailer = require('nodemailer');
 const {authenticator} = require('otplib');
+authenticator.options = { digits: 6, step: 300 }; // Set the OTP to be 6 digits and valid for 5 minutes
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
