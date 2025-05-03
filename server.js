@@ -1,6 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 3000;
@@ -8,7 +9,7 @@ const PORT = 3000;
 // Middleware
 app.use(bodyParser.json());
 
-// Connect to the groupevaluation.db database
+// Connect to the database
 const db = new sqlite3.Database('./groupevaluation.db', (err) => {
   if (err) {
     console.error('Error connecting to database:', err.message);
@@ -17,85 +18,74 @@ const db = new sqlite3.Database('./groupevaluation.db', (err) => {
   }
 });
 
-// Create users table if it doesn't exist
-db.run(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    age INTEGER
-  )
-`);
+// Register a new user
+app.post('/register', async (req, res) => {
+  const { FirstName, LastName, Email, Password } = req.body;
 
-// Routes
-// Add a new user
-app.post('/users', (req, res) => {
-  const { name, email, age } = req.body;
-  const query = `INSERT INTO users (name, email, age) VALUES (?, ?, ?)`;
-  db.run(query, [name, email, age], function (err) {
+  if (!FirstName || !LastName || !Email || !Password) {
+    return res.status(400).json({ error: 'All fields are required' });
+  }
+
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(Password, 10);
+
+    const query = `
+      INSERT INTO tblUsers (FirstName, LastName, Email, Password, CreationDateTime)
+      VALUES (?, ?, ?, ?, datetime('now'))
+    `;
+    db.run(query, [FirstName, LastName, Email, hashedPassword], function (err) {
+      if (err) {
+        if (err.message.includes('UNIQUE constraint failed')) {
+          return res.status(400).json({ error: 'Email already exists' });
+        }
+        return res.status(500).json({ error: err.message });
+      }
+      res.status(201).json({ message: 'User registered successfully', UserID: this.lastID });
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Error hashing password' });
+  }
+});
+
+// Login a user
+app.post('/login', (req, res) => {
+  const { Email, Password } = req.body;
+
+  if (!Email || !Password) {
+    return res.status(400).json({ error: 'Email and Password are required' });
+  }
+
+  const query = `SELECT * FROM tblUsers WHERE Email = ?`;
+  db.get(query, [Email], async (err, user) => {
     if (err) {
-      res.status(400).json({ error: err.message });
-    } else {
-      res.status(201).json({ id: this.lastID });
+      return res.status(500).json({ error: err.message });
+    }
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    try {
+      // Compare the hashed password
+      const isMatch = await bcrypt.compare(Password, user.Password);
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+      res.json({ message: 'Login successful', UserID: user.UserID });
+    } catch (err) {
+      res.status(500).json({ error: 'Error validating password' });
     }
   });
 });
 
-// Get all users
+// Fetch all users
 app.get('/users', (req, res) => {
-  const query = `SELECT * FROM users`;
+  const query = `SELECT UserID, FirstName, LastName, Email, CreationDateTime, LastLoginDateTime FROM tblUsers`;
   db.all(query, [], (err, rows) => {
     if (err) {
-      res.status(500).json({ error: err.message });
-    } else {
-      res.json(rows);
+      return res.status(500).json({ error: err.message });
     }
-  });
-});
-
-// Get a user by ID
-app.get('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const query = `SELECT * FROM users WHERE id = ?`;
-  db.get(query, [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else if (!row) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.json(row);
-    }
-  });
-});
-
-// Update a user by ID
-app.put('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const { name, email, age } = req.body;
-  const query = `UPDATE users SET name = ?, email = ?, age = ? WHERE id = ?`;
-  db.run(query, [name, email, age, id], function (err) {
-    if (err) {
-      res.status(400).json({ error: err.message });
-    } else if (this.changes === 0) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.json({ message: 'User updated successfully' });
-    }
-  });
-});
-
-// Delete a user by ID
-app.delete('/users/:id', (req, res) => {
-  const { id } = req.params;
-  const query = `DELETE FROM users WHERE id = ?`;
-  db.run(query, [id], function (err) {
-    if (err) {
-      res.status(500).json({ error: err.message });
-    } else if (this.changes === 0) {
-      res.status(404).json({ error: 'User not found' });
-    } else {
-      res.json({ message: 'User deleted successfully' });
-    }
+    res.json(rows);
   });
 });
 
