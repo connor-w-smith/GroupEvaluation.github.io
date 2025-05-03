@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Connect to the database
 const db = new sqlite3.Database('./groupevaluation.db', (err) => {
