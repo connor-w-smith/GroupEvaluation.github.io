@@ -92,7 +92,7 @@ document.querySelector("#loginBtn").addEventListener("click",(e) => {
 
 })
 
-//Vanilla JS query selector for btnRegister for alerts
+// //Vanilla JS query selector for btnRegister for alerts
 document.querySelector("#btnSubmit").addEventListener("click",(e) => {
   //alert("Test");
   const regEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
