@@ -149,6 +149,14 @@
                 dynamicContent.style.display = "none";
                 document.getElementById("selectForm").value = "";
             });
+            <button id="btnRegister" class="btn btn-link">Don't have an account? Register here!</button>
+            document.getElementById("btnRegister").addEventListener("click", function () {
+                // Hide the login form
+                document.getElementById("formLoginWrapper").style.display = "none";
+            
+                // Show the registration form
+                document.getElementById("registerWrapper").style.display = "block";
+            });
         });
     </script>
     <script src="app.js"></script>
