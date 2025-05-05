@@ -47,26 +47,6 @@ const verifyToken = (token, secret) => {
   return isValid;
 }
 
-loginBtn.addEventListener('click', () => {
-  const email = document.getElementById('loginEmail').value;
-
-  if (!email) {
-    alert('Please enter your email address.');
-    return;
-  }
-
-  // Step 1: Generate a secret
-  const secret = generateSecret();
-
-  // Step 2: Generate a TOTP using the secret
-  const token = generateToken(secret);
-
-  // Step 3: Send the TOTP to the user's email
-  sendEmail(email, token);
-
-  // Inform the user
-  alert('A 2FA token has been sent to your email. Please check your inbox.');
-});
 //end nodemailer
 
 const app = express();
@@ -159,6 +139,25 @@ app.post('/login', (req, res) => {
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
+      const email = document.getElementById('loginEmail').value;
+
+      if (!email) {
+        alert('Please enter your email address.');
+        return;
+      }
+
+      // Step 1: Generate a secret
+      const secret = generateSecret();
+
+      // Step 2: Generate a TOTP using the secret
+      const token = generateToken(secret);
+
+      // Step 3: Send the TOTP to the user's email
+      sendEmail(email, token);
+
+      // Inform the user
+      alert('A 2FA token has been sent to your email. Please check your inbox.');
+
       res.json({ message: 'Login successful', UserID: user.UserID });
     } catch (err) {
       res.status(500).json({ error: 'Error validating password' });
