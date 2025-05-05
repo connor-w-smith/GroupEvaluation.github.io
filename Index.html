@@ -6,6 +6,7 @@
   <title>Group Evaluation Portal</title>
   <link href="bootstrap.min.css" rel="stylesheet">
   <link href="index.css" rel="stylesheet">
+  <!--NEED this to keep stuff invisible-->
   <style>
     .hidden { display: none !important; }
   </style>
@@ -14,7 +15,7 @@
 
 <div class="d-flex justify-content-center align-items-center vh-100 flex-column">
 
-  <!-- LOGIN FORM -->
+  <!-- making login form-->
   <form id="formLogin" class="card bg-dark col-12 col-md-5 col-lg-4 p-4 shadow">
     <div class="card-body">
       <h3 class="text-center text-primary mb-3">Welcome To Group Evaluation!</h3>
@@ -29,12 +30,14 @@
       </div>
       <button type="button" class="btn btn-outline-primary w-100" id="loginBtn">Login</button>
       <div class="text-end mt-3">
-        <a href="#" class="text-secondary" id="gotoRegister"><em>Don't have an account? Register Here!</em></a>
+        <button type="button" class="btn btn-link text-primary" id="gotoRegister" style="text-decoration: underline;">
+          Don't have an account? Register Here!
+        </button>       
       </div>
     </div>
   </form>
 
-  <!-- MFA FORM -->
+  <!-- making the mfa form-->
   <form id="formMFA" class="card bg-dark col-12 col-md-5 col-lg-4 p-4 shadow hidden">
     <div class="card-body">
       <h3 class="text-center text-primary mb-3">Multi-Factor Authentication</h3>
@@ -47,7 +50,7 @@
     </div>
   </form>
 
-  <!-- REGISTER FORM -->
+  <!-- making the register form -->
   <div id="formRegister" class="col-12 col-md-6 col-lg-5 p-4 shadow bg-dark hidden">
     <div id="selectionForm" class="card bg-dark text-light p-4 shadow">
       <div class="card-body text-center">
@@ -59,10 +62,12 @@
         </select>
       </div>
     </div>
+    <!--need for dynamic html-->
     <div id="dynamicContent" class="mt-3"></div>
+    <button type="button" class="btn btn-link text-primary mt-3" id="backToLoginFromRegister" style="text-decoration: underline;">Back to Login</button>
   </div>
 
-  <!-- EVALUATION FORM -->
+  <!-- making the evaluation form -->
   <form id="formEvaluation" class="card bg-dark col-12 col-md-5 col-lg-4 p-4 shadow hidden">
     <div class="card-body">
       <h3 class="text-center text-primary mb-3">Group Evaluation</h3>
@@ -79,6 +84,7 @@
         </select>
         <label for="numberTeammates">Number of Teammates</label>
       </div>
+      <!--filled out with adjacenthtml-->
       <div id="evalForms"></div>
       <button type="submit" class="btn btn-outline-primary w-100 mt-3" id="evalBtn">Submit</button>
     </div>
@@ -87,31 +93,54 @@
 </div>
 
 <script>
-  // Login Simulation
+  
+  //The handling of going between different forms
+  // Switch Login -> MFA
   document.getElementById("loginBtn").onclick = () => {
     document.getElementById("formLogin").classList.add("hidden");
     document.getElementById("formMFA").classList.remove("hidden");
   };
 
-  // MFA Code Simulation
+  // Switch MFA -> Evaluation
   document.getElementById("codeBtn").onclick = () => {
     document.getElementById("formMFA").classList.add("hidden");
     document.getElementById("formEvaluation").classList.remove("hidden");
   };
 
-  // Switch to Register View
-  document.getElementById("gotoRegister").onclick = (e) => {
-    e.preventDefault();
+  // Login -> Register
+  document.getElementById("gotoRegister").onclick = () => {
     document.getElementById("formLogin").classList.add("hidden");
     document.getElementById("formRegister").classList.remove("hidden");
   };
 
-  // Registration Logic
+
+  // Register -> Login
+  document.getElementById("backToLoginFromRegister").onclick = () => {
+    document.getElementById("formRegister").classList.add("hidden");
+    document.getElementById("formLogin").classList.remove("hidden");
+    document.getElementById("selectForm").value = "";
+    document.getElementById("selectionForm").style.display = "block";
+    document.getElementById("dynamicContent").innerHTML = "";
+  };
+
+  //Input validation
+  document.getElementById("loginBtn")?.addEventListener("click", function () {
+    const strEmail = document.getElementById("loginEmail").value.trim();
+    const strPassword = document.getElementById("loginPassword").value.trim();
+
+    const regEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+
+    
+});
+
+
+  // Registration selection logic
   document.getElementById("selectForm").addEventListener("change", function () {
     let selection = this.value;
     let selectionForm = document.getElementById("selectionForm");
     let dynamicContent = document.getElementById("dynamicContent");
 
+    //back button logic
     selectionForm.style.display = "none";
     dynamicContent.innerHTML = "";
 
@@ -147,7 +176,6 @@
       ]));
     }
 
-    // Back button logic
     document.getElementById("goBack").onclick = () => {
       selectionForm.style.display = "block";
       dynamicContent.innerHTML = "";
@@ -155,12 +183,16 @@
     };
   });
 
-  // Evaluation Form Dynamic Teammates
+  // Evaluation form fields
   document.getElementById("numberTeammates").addEventListener("change", function () {
+    //getting the number of teammates from drop down
     const count = parseInt(this.value);
+    //the form we need to put content into
     const formHolder = document.getElementById("evalForms");
+    //clear the form of the fields each time drop down changes
     formHolder.innerHTML = "";
     for (let i = 0; i < count; i++) {
+      //appends each block to the form
       formHolder.insertAdjacentHTML("beforeend", `
         <div class="form-floating mt-3 mb-2">
           <input type="text" class="form-control bg-dark text-light" id="memberName${i+1}" placeholder="Name">
@@ -179,7 +211,5 @@
   });
 </script>
 <script src="app.js"></script>
-<script src="bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

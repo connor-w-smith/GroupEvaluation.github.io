@@ -21,6 +21,7 @@ function showForm(formIdToShow) {
     });
 }
 
+//Not sure if we still need these
 // Event listener for "Don't have an account? Register Here!" button
 document.getElementById("registerBtn")?.addEventListener("click", function () {
     showForm("registerWrapper"); // Show the registration form
