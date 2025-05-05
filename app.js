@@ -44,7 +44,7 @@ document.getElementById("btnSubmit")?.addEventListener("click", function () {
     console.log("Registration form submitted");
 });
 
-document.querySelector("#btnLogin").addEventListener("click",(e) => {
+document.querySelector("#loginBtn").addEventListener("click",(e) => {
   //alert("Test");
   const regEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   let strUsername = document.querySelector("#loginEmail").value
