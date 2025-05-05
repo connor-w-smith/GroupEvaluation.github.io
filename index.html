@@ -3,41 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Group Evaluation</title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <title>Group Evaluation Portal</title>
     <link href="bootstrap.min.css" rel="stylesheet">
     <link href="index.css" rel="stylesheet">
+    <style>
+        .hidden { display: none; }
+    </style>
 </head>
- <body class="bg-dark">
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <!-- Creating the Login Form -->
-        <form class=" bg-dark card col-12 col-md-5 col-lg-4" id="formLogin">
+<body class="bg-dark">
+
+    <!-- Login Form -->
+    <div id="formLoginWrapper" class="d-flex justify-content-center align-items-center vh-100">
+        <form class="bg-dark card col-12 col-md-5 col-lg-4" id="formLogin">
             <div class="card-body">
                 <h3 class="text-center mb-0 text-primary">Welcome To Group Evaluation!</h3>
                 <p class="text-center mt-2 text-secondary"><em>Please enter your information.</em></p>
                 <div class="form-floating mt-3 mb-3">
-                    <!--PROBLEM WITH INPUT: ONCE CLICKED ON, THE TEXT GOES WHITE-->
-                    <input type="email" class="form-control bg-dark" id="loginEmail" aria-label="Email Address" placeholder="name@example.com">
+                    <input type="email" class="form-control bg-dark" id="loginEmail" placeholder="name@example.com">
                     <label for="loginEmail">Email Address</label>
                 </div>
                 <div class="form-floating">
-                     <!--PROBLEM WITH INPUT: ONCE CLICKED ON, THE TEXT GOES WHITE-->
-                    <input type="password" class="form-control bg-dark" id="loginPassword" aria-label="Password" placeholder="Password">
-                    <label for="loginPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control bg-dark" id="loginPassword" placeholder="Password">
+                    <label for="loginPassword">Password</label>
                 </div>
                 <div class="text-center">
-                    <!--Once button is clicked, user will be logged in, given they entered correct information. -->
-                    <button type="button" class="btn btn-outline-primary mt-3" aria-label="Login Button" id="loginBtn">Login</button>
+                    <button type="button" class="btn btn-outline-primary mt-3" id="loginBtn" onclick="showForm('formAuthWrapper')">Login</button>
                 </div>
-                <div class=" d-flex justify-content-end">
-                    <!--Once link is clicked, user will be directed to a register page.-->
-                    <a href="register.html" class="mt-4 text-secondary" aria-label="Register Link"><em>Don't have an account? Register Here!</em></a>
+                <div class="d-flex justify-content-end">
+                    <a href="#" class="mt-4 text-secondary" onclick="showForm('registerWrapper')"><em>Don't have an account? Register Here!</em></a>
                 </div>
             </div>
         </form>
     </div>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
-    <script src = "app.js".js"></script>
+    <!-- MFA Form -->
+    <div id="formAuthWrapper" class="d-flex justify-content-center align-items-center vh-100 hidden">
+        <form class="bg-dark card col-12 col-md-5 col-lg-4" id="formAuth">
+            <div class="card-body">
+                <h3 class="text-center mb-0 text-primary">Multi-Factor Authentication</h3>
+                <p class="text-center mt-2 text-secondary"><em>Please enter the code you received in your email.</em></p>
+                <div class="form-floating mt-3 mb-3">
+                    <input type="text" class="form-control bg-dark" id="authCode" placeholder="123456">
+                    <label for="authCode">Enter Code:</label>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-outline-primary mt-3" onclick="showForm('evaluationWrapper')">Enter</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Register Form -->
+    <div id="registerWrapper" class="d-flex justify-content-center align-items-center vh-100 flex-column hidden">
+        <div id="selectionForm" class="card bg-dark text-light col-12 col-md-6 col-lg-5 p-4 shadow-lg">
+            <div class="card-body text-center">
+                <h3 class="text-center mb-3 text-primary">Register Here!</h3>
+                <div class="d-flex justify-content-center">
+                    <select class="form-select bg-dark mt-4" id="selectForm">
+                        <option value="">Please Select The Following</option>
+                        <option value="1">Student</option>
+                        <option value="2">Instructor</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="dynamicContent" class="mt-3"></div>
+    </div>
+
+    <!-- Evaluation Form -->
+    <div id="evaluationWrapper" class="d-flex justify-content-center align-items-center vh-100 hidden">
+        <form class="bg-dark card col-12 col-md-5 col-lg-4" id="formEvaluation">
+            <div class="card-body">
+                <h3 class="text-center mb-0 text-primary">Welcome To Group Evaluation!</h3>
+                <p class="text-center mt-2 text-secondary"><em>Please Fill Out The Form</em></p>
+                <div class="form-floating mt-3 mb-3">
+                    <input type="number" class="form-control bg-dark" id="groupNum" min="1" max="50" placeholder="1-50">
+                    <label for="groupNumber">Group #:</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <select class="form-select bg-dark text-light" id="numberTeammates">
+                        <option selected disabled></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                    <label for="numberTeammates">Number of Teammates</label>
+                </div>
+                <div id="evalForms"></div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-primary mt-3" id="evalBtn">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Toggle form visibility
+        function showForm(formId) {
+            const allForms = ['formLoginWrapper', 'formAuthWrapper', 'registerWrapper', 'evaluationWrapper'];
+            allForms.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(formId).classList.remove('hidden');
+        }
+
+        // Dynamic teammate form generator
+        document.getElementById('numberTeammates')?.addEventListener('change', function () {
+            const count = parseInt(this.value);
+            const formHolder = document.getElementById('evalForms');
+            formHolder.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const memberEval = `
+                    <div class="form-floating mt-4 mb-2">
+                        <input type="text" class="form-control bg-dark text-light" id="memberName${i+1}" placeholder="Teammate ${i+1}">
+                        <label for="memberName${i+1}">Name: </label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control bg-dark text-light" id="textPublic${i+1}" placeholder="Public comment for Member ${i+1}" style="height: 100px;"></textarea>
+                        <label for="textPublic${i+1}">Comments: </label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <textarea class="form-control bg-dark text-light" id="textPrivate${i+1}" placeholder="Private comment for Member ${i+1}" style="height: 100px;"></textarea>
+                        <label for="textPrivate${i+1}">Comments (Not Visible To Teammates): </label>
+                    </div>`;
+                formHolder.insertAdjacentHTML('beforeend', memberEval);
+            }
+        });
+
+        // Registration form logic
+        document.getElementById("selectForm")?.addEventListener("change", function () {
+            const selection = this.value;
+            const selectionForm = document.getElementById("selectionForm");
+            const dynamicContent = document.getElementById("dynamicContent");
+            selectionForm.style.display = "none";
+            dynamicContent.style.display = "block";
+            dynamicContent.innerHTML = "";
+
+            function createCard(title, fields) {
+                let card = document.createElement("div");
+                card.className = "card bg-dark text-light col-12 col-md-6 col-lg-5 p-4 shadow-lg";
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h4 class="text-center text-primary mb-4">${title}</h4>
+                        ${fields.map(field => `
+                            <div class="mb-3">
+                                <label class="form-label">${field.label}</label>
+                                <input type="${field.type}" class="form-control bg-dark text-light p-2" placeholder="${field.placeholder}">
+                            </div>
+                        `).join("")}
+                        <button class="btn btn-primary w-100 mt-3">Submit</button>
+                        <button class="btn btn-primary w-100 mt-3" id="goBack">Back</button>
+                    </div>`;
+                return card;
+            }
+
+            if (selection === "1") {
+                dynamicContent.appendChild(createCard("Student Registration", [
+                    { label: "Student Name", type: "text", placeholder: "Enter your name" },
+                    { label: "Student ID", type: "text", placeholder: "Enter your ID" },
+                    { label: "Email", type: "email", placeholder: "Enter your email" },
+                    { label: "Discord", type: "text", placeholder: "Enter your discord (optional)" }
+                ]));
+            } else if (selection === "2") {
+                dynamicContent.appendChild(createCard("Instructor Registration", [
+                    { label: "Instructor Name", type: "text", placeholder: "Enter your name" },
+                    { label: "Employee ID", type: "text", placeholder: "Enter your employee ID" },
+                    { label: "Department", type: "text", placeholder: "Enter your department" }
+                ]));
+            }
+
+            document.getElementById("goBack").addEventListener("click", function () {
+                selectionForm.style.display = "block";
+                dynamicContent.style.display = "none";
+                document.getElementById("selectForm").value = "";
+            });
+        });
+    </script>
+    <script src="app.js"></script>
+    <script src="bootstrap.bundle.min.js"></script>
 </body>
 </html>
