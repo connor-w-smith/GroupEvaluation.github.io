@@ -33,12 +33,13 @@
                     <button type="button" class="btn btn-link mt-4 text-secondary" onclick="showForm('registerWrapper')">
                         <em>Don't have an account? Register Here!</em>
                     </button>
+                </div>
             </div>
         </form>
     </div>
 
     <!-- MFA Form -->
-    <div id="formAuthWrapper" class="d-flex justify-content-center align-items-center vh-100" display="none">
+    <div id="formAuthWrapper" class="d-flex justify-content-center align-items-center vh-100 hidden">
         <form class="bg-dark card col-12 col-md-5 col-lg-4" id="formAuth">
             <div class="card-body">
                 <h3 class="text-center mb-0 text-primary">Multi-Factor Authentication</h3>
@@ -55,7 +56,7 @@
     </div>
 
     <!-- Register Form -->
-    <div id="registerWrapper" class="d-flex justify-content-center align-items-center vh-100 flex-column" display="none">
+    <div id="registerWrapper" class="d-flex justify-content-center align-items-center vh-100 flex-column hidden">
         <div id="selectionForm" class="card bg-dark text-light col-12 col-md-6 col-lg-5 p-4 shadow-lg">
             <div class="card-body text-center">
                 <h3 class="text-center mb-3 text-primary">Register Here!</h3>
@@ -72,7 +73,7 @@
     </div>
 
     <!-- Evaluation Form -->
-    <div id="evaluationWrapper" class="d-flex justify-content-center align-items-center vh-100" display="none">
+    <div id="evaluationWrapper" class="d-flex justify-content-center align-items-center vh-100 hidden">
         <form class="bg-dark card col-12 col-md-5 col-lg-4" id="formEvaluation">
             <div class="card-body">
                 <h3 class="text-center mb-0 text-primary">Welcome To Group Evaluation!</h3>
@@ -107,29 +108,6 @@
             document.getElementById(formId).classList.remove('hidden');
         }
 
-        // Dynamic teammate form generator
-        document.getElementById('numberTeammates')?.addEventListener('change', function () {
-            const count = parseInt(this.value);
-            const formHolder = document.getElementById('evalForms');
-            formHolder.innerHTML = '';
-            for (let i = 0; i < count; i++) {
-                const memberEval = `
-                    <div class="form-floating mt-4 mb-2">
-                        <input type="text" class="form-control bg-dark text-light" id="memberName${i+1}" placeholder="Teammate ${i+1}">
-                        <label for="memberName${i+1}">Name: </label>
-                    </div>
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control bg-dark text-light" id="textPublic${i+1}" placeholder="Public comment for Member ${i+1}" style="height: 100px;"></textarea>
-                        <label for="textPublic${i+1}">Comments: </label>
-                    </div>
-                    <div class="form-floating mb-2">
-                        <textarea class="form-control bg-dark text-light" id="textPrivate${i+1}" placeholder="Private comment for Member ${i+1}" style="height: 100px;"></textarea>
-                        <label for="textPrivate${i+1}">Comments (Not Visible To Teammates): </label>
-                    </div>`;
-                formHolder.insertAdjacentHTML('beforeend', memberEval);
-            }
-        });
-
         // Registration form logic
         document.getElementById("selectForm")?.addEventListener("change", function () {
             const selection = this.value;
@@ -151,7 +129,7 @@
                                 <input type="${field.type}" class="form-control bg-dark text-light p-2" placeholder="${field.placeholder}">
                             </div>
                         `).join("")}
-                        <button id="btnSubmit" class="btn btn-primary w-100 mt-3">Submit</button>
+                        <button id="btnSubmit" class="btn btn-primary w-100 mt-3" onclick="showForm('formLoginWrapper')">Submit</button>
                         <button class="btn btn-primary w-100 mt-3" id="goBack">Back</button>
                     </div>`;
                 return card;
@@ -178,67 +156,6 @@
                 document.getElementById("selectForm").value = "";
             });
         });
-    </script>
-    <script>
-
-        //function to listen for when a user selects one of the options in the dropdown menu:
-    document.getElementById("selectForm").addEventListener("change", function () {
-            let selection = this.value;
-            let selectionForm = document.getElementById("selectionForm");
-            let dynamicContent = document.getElementById("dynamicContent");
-
-            //Hide the selection form
-            selectionForm.style.display ="none";
-            dynamicContent.style.display = "block";
-
-            // Clear any existing dynamic content
-            dynamicContent.innerHTML = "";
-
-            // Function to create a card:
-            function createCard(title, fields) {
-                let card = document.createElement("div");
-                card.className = "card bg-dark text-light col-12 col-md-6 col-lg-5 p-4 shadow-lg";
-                card.innerHTML = `
-                    <div class="card-body">
-                        <h4 class="text-center text-primary mb-4">${title}</h4>
-                        ${fields.map(field => `
-                            <div class="mb-3">
-                                <label class="form-label">${field.label}</label>
-                                <input type="${field.type}" class="form-control bg-dark text-light p-2" placeholder="${field.placeholder}">
-                            </div>
-                        `).join("")}
-                        <button class "btn btn-primary w-100 mt-3" id="btnSubmit">Submit</button>
-                        <button class="btn btn-primary w-100 mt-3" id="goBack">Back</button>
-                    </div>`
-                return card;
-            }
-            //if statements to change the card based on what option is chosen:
-            if (selection === "1") {
-                let studentCard = createCard("Student Registration", [
-                    { label: "Student Name", type: "text", placeholder: "Enter your name" },
-                    { label: "Student ID", type: "text", placeholder: "Enter your ID" },
-                    { label: "Email", type: "email", placeholder: "Enter your email" },
-                    { label: "Discord", type: "text", placeholder: "Enter your discord (optional)"}
-                ]);
-                dynamicContent.appendChild(studentCard);
-            } else if (selection === "2") {
-                let instructorCard = createCard("Instructor Registration", [
-                    { label: "Instructor Name", type: "text", placeholder: "Enter your name" },
-                    { label: "Employee ID", type: "text", placeholder: "Enter your employee ID" },
-                    { label: "Department", type: "text", placeholder: "Enter your department" }
-                ]);
-                dynamicContent.appendChild(instructorCard);
-            }
-            //Add an event listener for the back button:
-            document.getElementById("goBack").addEventListener("click", function() {
-                selectionForm.style.display = "block"
-                dynamicContent.style.display = "none"
-                document.getElementById("selectForm").value ="" //resets selection
-            })
-        });
-    </script>
-    <script>
-        //add eventlistener for
     </script>
     <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
