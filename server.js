@@ -176,6 +176,12 @@ app.get('/users', (req, res) => {
   });
 });
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Welcome to the Group Evaluation API",
+  });
+} );
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
