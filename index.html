@@ -178,6 +178,64 @@
             });
         });
     </script>
+    <script>
+
+        //function to listen for when a user selects one of the options in the dropdown menu:
+    document.getElementById("selectForm").addEventListener("change", function () {
+            let selection = this.value;
+            let selectionForm = document.getElementById("selectionForm");
+            let dynamicContent = document.getElementById("dynamicContent");
+
+            //Hide the selection form
+            selectionForm.style.display ="none";
+            dynamicContent.style.display = "block";
+
+            // Clear any existing dynamic content
+            dynamicContent.innerHTML = "";
+
+            // Function to create a card:
+            function createCard(title, fields) {
+                let card = document.createElement("div");
+                card.className = "card bg-dark text-light col-12 col-md-6 col-lg-5 p-4 shadow-lg";
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h4 class="text-center text-primary mb-4">${title}</h4>
+                        ${fields.map(field => `
+                            <div class="mb-3">
+                                <label class="form-label">${field.label}</label>
+                                <input type="${field.type}" class="form-control bg-dark text-light p-2" placeholder="${field.placeholder}">
+                            </div>
+                        `).join("")}
+                        <button class "btn btn-primary w-100 mt-3" id="btnSubmit">Submit</button>
+                        <button class="btn btn-primary w-100 mt-3" id="goBack">Back</button>
+                    </div>`
+                return card;
+            }
+            //if statements to change the card based on what option is chosen:
+            if (selection === "1") {
+                let studentCard = createCard("Student Registration", [
+                    { label: "Student Name", type: "text", placeholder: "Enter your name" },
+                    { label: "Student ID", type: "text", placeholder: "Enter your ID" },
+                    { label: "Email", type: "email", placeholder: "Enter your email" },
+                    { label: "Discord", type: "text", placeholder: "Enter your discord (optional)"}
+                ]);
+                dynamicContent.appendChild(studentCard);
+            } else if (selection === "2") {
+                let instructorCard = createCard("Instructor Registration", [
+                    { label: "Instructor Name", type: "text", placeholder: "Enter your name" },
+                    { label: "Employee ID", type: "text", placeholder: "Enter your employee ID" },
+                    { label: "Department", type: "text", placeholder: "Enter your department" }
+                ]);
+                dynamicContent.appendChild(instructorCard);
+            }
+            //Add an event listener for the back button:
+            document.getElementById("goBack").addEventListener("click", function() {
+                selectionForm.style.display = "block"
+                dynamicContent.style.display = "none"
+                document.getElementById("selectForm").value ="" //resets selection
+            })
+        });
+    </script>
     <script src="app.js"></script>
     <script src="bootstrap.bundle.min.js"></script>
 </body>
