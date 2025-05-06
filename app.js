@@ -75,6 +75,12 @@ document.querySelector("#loginBtn").addEventListener("click",(e) => {
 
       //clear form on successful login
       document.getElementById("frmLogin").reset();
+
+      // Switch Login -> MFA
+        document.getElementById("loginBtn").onclick = () => {
+        document.getElementById("formLogin").classList.add("hidden");
+        document.getElementById("formMFA").classList.remove("hidden");
+        };
   }
 
   //Sweet alert for validating email and password
