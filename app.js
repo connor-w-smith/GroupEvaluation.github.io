@@ -44,7 +44,7 @@ document.getElementById("btnSubmit")?.addEventListener("click", function () {
     console.log("Registration form submitted");
 });
 
-document.querySelector("#loginBtn").addEventListener("click",(e) => {
+document.querySelector("#loginBtn").addEventListener("click", async function() {
   //alert("Test");
   const regEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   let strUsername = document.querySelector("#loginEmail").value
@@ -63,24 +63,45 @@ document.querySelector("#loginBtn").addEventListener("click",(e) => {
   }
   //If no errors were encountered, give a sweet alert to show successful login
   if(blnError == false){
-      Swal.fire({
-          title: "You have logged in. The Success Hippo says hello!",
-          html: strMessage,
-          imageUrl: 'HippoSuccess.svg', // Replace with the path to your image
-          imageWidth: 300, // Adjust the width of the image
-          imageHeight: 300, // Adjust the height of the image
-          imageAlt: 'Hippo Success', // Optional description for accessibility
-      });
-
-
+    
       //clear form on successful login
       document.getElementById("frmLogin").reset();
+      //send post request to server to compare the login credentials
+      try{
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ Email: strUsername, Password: strPassword })
+        });
+      }
+        catch (error) {
+            console.error('Error:', error);
+            }
+        // Check if the response is successful
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Login successful:', data);
+            // Handle successful login (e.g., redirect to another page)
+            Swal.fire({
+                title: "You have logged in. The Success Hippo says hello!",
+                html: strMessage,
+                imageUrl: 'HippoSuccess.svg', // Replace with the path to your image
+                imageWidth: 300, // Adjust the width of the image
+                imageHeight: 300, // Adjust the height of the image
+                imageAlt: 'Hippo Success', // Optional description for accessibility
+            });
+            // Switch Login -> MFA
+            document.getElementById("loginBtn").onclick = () => {
+            document.getElementById("formLogin").classList.add("hidden");
+            document.getElementById("formMFA").classList.remove("hidden");
+            };
+        }
 
-      // Switch Login -> MFA
-        document.getElementById("loginBtn").onclick = () => {
-        document.getElementById("formLogin").classList.add("hidden");
-        document.getElementById("formMFA").classList.remove("hidden");
-        };
+
+      
+
   }
 
   //Sweet alert for validating email and password
