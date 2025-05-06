@@ -65,7 +65,7 @@ document.querySelector("#loginBtn").addEventListener("click", async function() {
   if(blnError == false){
     
       //clear form on successful login
-      document.getElementById("frmLogin").reset();
+      //document.getElementById("frmLogin").reset();
       //send post request to server to compare the login credentials
       try{
         const response = await fetch('/login', {
